@@ -1,26 +1,26 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from "next/link";
+
+// 동적 임포트로 변경
+const VideoBackground = dynamic(() => import('@/components/VideoBackground'), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 w-full h-full bg-black" />
+  ),
+});
+
+const FAQ = dynamic(() => import('@/components/FAQ'), {
+  loading: () => <div className="py-24 bg-zinc-900" />,
+});
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
-        {/* Video Background */}
-        <div className="absolute inset-0 w-full h-full">
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/tesla-poster.jpg"
-          >
-            <source src="https://digitalassets.tesla.com/tesla-contents/video/upload/Homepage-Model-Y-Desktop-NA.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/60"></div>
-        </div>
+        <VideoBackground />
 
         <div className="relative z-20 max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-wide">
@@ -68,28 +68,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-24 bg-zinc-900">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-12">
-            자주 묻는 질문
-          </h2>
-          <div className="space-y-6">
-            <div className="bg-zinc-800/50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold mb-3">어떤 기능이 있나요?</h3>
-              <p className="text-gray-300">
-                캘린더를 통한 일정 관리, 게시판을 통한 소통, 로그인/회원가입 기능을 제공합니다.
-              </p>
-            </div>
-            <div className="bg-zinc-800/50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold mb-3">무료로 사용할 수 있나요?</h3>
-              <p className="text-gray-300">
-                네, 모든 기능을 무료로 이용하실 수 있습니다.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FAQ />
 
       {/* Footer */}
       <footer className="py-8 bg-black">
