@@ -1,13 +1,15 @@
 'use client';
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center text-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-red-900 animate-gradient-x"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-900 via-black to-transparent opacity-70"></div>
         <div className="relative z-20 max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-6xl font-bold mb-4">
             할 일 관리를 더 쉽고 편리하게
