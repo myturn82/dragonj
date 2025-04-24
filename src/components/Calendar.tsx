@@ -16,22 +16,34 @@ interface Event {
 
 export default function Calendar() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newEventTitle, setNewEventTitle] = useState('');
+  const [selectedInfo, setSelectedInfo] = useState<DateSelectArg | null>(null);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const title = window.prompt('일정 제목을 입력하세요');
-    if (title) {
-      const calendarApi = selectInfo.view.calendar;
-      calendarApi.unselect(); // 현재 선택 해제
+    setSelectedInfo(selectInfo);
+    setShowModal(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newEventTitle.trim() && selectedInfo) {
+      const calendarApi = selectedInfo.view.calendar;
+      calendarApi.unselect();
 
       setEvents([
         ...events,
         {
-          title,
-          start: selectInfo.start,
-          end: selectInfo.end,
-          allDay: selectInfo.allDay,
+          title: newEventTitle.trim(),
+          start: selectedInfo.start,
+          end: selectedInfo.end,
+          allDay: selectedInfo.allDay,
         },
       ]);
+
+      setNewEventTitle('');
+      setShowModal(false);
+      setSelectedInfo(null);
     }
   };
 
@@ -125,6 +137,43 @@ export default function Calendar() {
           locale="ko"
         />
       </div>
+
+      {/* 일정 입력 모달 */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm">
+            <h3 className="text-lg font-semibold mb-4">새 일정 추가</h3>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                value={newEventTitle}
+                onChange={(e) => setNewEventTitle(e.target.value)}
+                placeholder="일정 제목을 입력하세요"
+                className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                autoFocus
+              />
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    setNewEventTitle('');
+                  }}
+                  className="px-4 py-2 text-gray-300 hover:text-white"
+                >
+                  취소
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  추가
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

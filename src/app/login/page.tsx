@@ -8,8 +8,8 @@ import { validateCredentials } from "@/lib/auth";
 export default function Login() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: 'test@example.com',
+    password: 'test1234'
   });
   const [error, setError] = useState('');
 
@@ -31,7 +31,7 @@ export default function Login() {
             {error}
           </div>
         )}
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <input
               type="email"
