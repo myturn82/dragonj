@@ -5,6 +5,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import type { DateSelectArg } from '@fullcalendar/core';
 
 interface Event {
   title: string;
@@ -16,7 +17,7 @@ interface Event {
 export default function Calendar() {
   const [events, setEvents] = useState<Event[]>([]);
 
-  const handleDateSelect = (selectInfo: any) => {
+  const handleDateSelect = (selectInfo: DateSelectArg) => {
     const title = prompt('일정 제목을 입력하세요');
     if (title) {
       setEvents([
