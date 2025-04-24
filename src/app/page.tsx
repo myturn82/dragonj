@@ -1,47 +1,66 @@
 'use client';
 
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center text-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-red-900 animate-gradient-x"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-900 via-black to-transparent opacity-70"></div>
+      <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/tesla-poster.jpg"
+          >
+            <source src="https://digitalassets.tesla.com/tesla-contents/video/upload/Homepage-Model-Y-Desktop-NA.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/60"></div>
+        </div>
+
         <div className="relative z-20 max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-wide">
             할 일 관리를 더 쉽고 편리하게
           </h1>
-          <p className="text-xl md:text-2xl mb-8">
+          <p className="text-xl md:text-2xl mb-12 font-light">
             캘린더와 게시판으로 당신의 일정을 관리하세요.
           </p>
           <Link href="/login">
-            <button className="bg-red-600 text-white px-8 py-4 rounded text-xl hover:bg-red-700 transition">
+            <button className="bg-white/10 backdrop-blur-sm border-[3px] border-white text-white px-12 py-3 rounded text-sm uppercase tracking-wider font-medium hover:bg-white hover:text-black transition-all duration-300">
               시작하기
             </button>
           </Link>
         </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16">
+      <section className="py-24 bg-black">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-16">
             <div className="text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 캘린더로 일정 관리
               </h2>
-              <p className="text-lg text-gray-300">
+              <p className="text-lg text-gray-300 leading-relaxed">
                 직관적인 캘린더로 모든 일정을 한눈에 확인하고 관리하세요.
               </p>
             </div>
             <div className="text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 게시판으로 소통하기
               </h2>
-              <p className="text-lg text-gray-300">
+              <p className="text-lg text-gray-300 leading-relaxed">
                 팀원들과 실시간으로 소통하고 정보를 공유하세요.
               </p>
             </div>
@@ -50,20 +69,20 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-black/50">
+      <section className="py-24 bg-zinc-900">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
+          <h2 className="text-3xl md:text-5xl font-bold text-center mb-12">
             자주 묻는 질문
           </h2>
-          <div className="space-y-4">
-            <div className="bg-gray-800 p-4 rounded">
-              <h3 className="text-xl font-bold mb-2">어떤 기능이 있나요?</h3>
+          <div className="space-y-6">
+            <div className="bg-zinc-800/50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold mb-3">어떤 기능이 있나요?</h3>
               <p className="text-gray-300">
                 캘린더를 통한 일정 관리, 게시판을 통한 소통, 로그인/회원가입 기능을 제공합니다.
               </p>
             </div>
-            <div className="bg-gray-800 p-4 rounded">
-              <h3 className="text-xl font-bold mb-2">무료로 사용할 수 있나요?</h3>
+            <div className="bg-zinc-800/50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold mb-3">무료로 사용할 수 있나요?</h3>
               <p className="text-gray-300">
                 네, 모든 기능을 무료로 이용하실 수 있습니다.
               </p>
@@ -73,7 +92,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-black/80">
+      <footer className="py-8 bg-black">
         <div className="max-w-6xl mx-auto px-4 text-gray-400 text-sm">
           <p className="text-center">© 2024 Todo App. All rights reserved.</p>
         </div>
