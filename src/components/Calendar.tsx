@@ -18,8 +18,11 @@ export default function Calendar() {
   const [events, setEvents] = useState<Event[]>([]);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const title = prompt('일정 제목을 입력하세요');
+    const title = window.prompt('일정 제목을 입력하세요');
     if (title) {
+      const calendarApi = selectInfo.view.calendar;
+      calendarApi.unselect(); // 현재 선택 해제
+
       setEvents([
         ...events,
         {
@@ -40,11 +43,24 @@ export default function Calendar() {
           .fc {
             background: #1a1a1a;
             border-radius: 0.5rem;
-            padding: 0.5rem sm:1rem;
+            padding: 0.5rem;
             min-width: 300px;
           }
           .fc-toolbar-title {
             font-size: 1.2rem !important;
+            color: #ffffff !important;
+          }
+          .fc-col-header-cell-cushion {
+            color: #ffffff !important;
+          }
+          .fc-daygrid-day-number {
+            color: #ffffff !important;
+          }
+          .fc-daygrid-event {
+            background: #e50914 !important;
+            border-color: #e50914 !important;
+            color: #ffffff !important;
+            padding: 2px 4px !important;
           }
           @media (max-width: 640px) {
             .fc-toolbar {
@@ -74,6 +90,7 @@ export default function Calendar() {
           .fc-button {
             background: #333 !important;
             border-color: #444 !important;
+            color: #ffffff !important;
           }
           .fc-button:hover {
             background: #444 !important;
@@ -82,9 +99,11 @@ export default function Calendar() {
             background: #e50914 !important;
             border-color: #e50914 !important;
           }
-          .fc-event {
-            background: #e50914;
-            border-color: #e50914;
+          .fc-timegrid-slot-label {
+            color: #ffffff !important;
+          }
+          .fc-timegrid-axis-cushion {
+            color: #ffffff !important;
           }
         `}</style>
         <FullCalendar
@@ -103,6 +122,7 @@ export default function Calendar() {
           events={events}
           select={handleDateSelect}
           height="auto"
+          locale="ko"
         />
       </div>
     </div>
