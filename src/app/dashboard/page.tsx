@@ -52,9 +52,11 @@ export default function Dashboard() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 px-4">
-        {activeTab === 'calendar' && <Calendar />}
-        {activeTab === 'board' && <Board />}
+      <main className="max-w-7xl mx-auto py-4 sm:py-6 px-2 sm:px-4">
+        <div className="w-full overflow-hidden">
+          {activeTab === 'calendar' && <Calendar />}
+          {activeTab === 'board' && <Board />}
+        </div>
       </main>
     </div>
   );

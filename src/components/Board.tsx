@@ -62,18 +62,18 @@ export default function Board() {
       </form>
 
       {/* 게시글 목록 */}
-      <div className="space-y-4">
+      <div className="space-y-4 px-4 sm:px-6 md:px-8">
         {posts.map((post) => (
-          <div key={post.id} className="bg-black/50 p-6 rounded-lg">
-            <h3 className="text-xl font-semibold text-white mb-2">{post.title}</h3>
-            <p className="text-gray-400 text-sm mb-4">
+          <div key={post.id} className="bg-black/50 p-4 sm:p-6 rounded-lg">
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">{post.title}</h3>
+            <p className="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4">
               {post.author} • {post.date}
             </p>
-            <p className="text-gray-300">{post.content}</p>
+            <p className="text-gray-300 text-sm sm:text-base">{post.content}</p>
           </div>
         ))}
         {posts.length === 0 && (
-          <div className="text-center text-gray-400 py-8">
+          <div className="text-center text-gray-400 py-6 sm:py-8">
             아직 게시글이 없습니다. 첫 게시글을 작성해보세요!
           </div>
         )}

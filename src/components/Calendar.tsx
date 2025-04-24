@@ -33,14 +33,34 @@ export default function Calendar() {
   };
 
   return (
-    <div className="bg-gray-900 rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-6">일정 관리</h2>
-      <div className="calendar-container">
+    <div className="bg-gray-900 rounded-lg p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">일정 관리</h2>
+      <div className="calendar-container overflow-x-auto">
         <style jsx global>{`
           .fc {
             background: #1a1a1a;
             border-radius: 0.5rem;
-            padding: 1rem;
+            padding: 0.5rem sm:1rem;
+            min-width: 300px;
+          }
+          .fc-toolbar-title {
+            font-size: 1.2rem !important;
+          }
+          @media (max-width: 640px) {
+            .fc-toolbar {
+              flex-direction: column;
+              gap: 1rem;
+            }
+            .fc-toolbar-title {
+              font-size: 1rem !important;
+            }
+            .fc-header-toolbar {
+              margin-bottom: 1rem !important;
+            }
+            .fc-button {
+              padding: 0.2rem 0.5rem !important;
+              font-size: 0.875rem !important;
+            }
           }
           .fc-theme-standard td, .fc-theme-standard th {
             border-color: #333;
