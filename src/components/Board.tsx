@@ -29,7 +29,7 @@ export default function Board() {
       id: Date.now(),
       title: newPost.title,
       content: newPost.content,
-      author: '사용자',
+      author: '송연우',
       date: new Date().toLocaleDateString(),
       comments: [],
     };
@@ -45,7 +45,7 @@ export default function Board() {
     const comment: Comment = {
       id: Date.now(),
       content: commentContent,
-      author: '사용자',
+      author: '송연우',
       date: new Date().toLocaleDateString(),
     };
 
@@ -59,16 +59,16 @@ export default function Board() {
 
   return (
     <div className="relative min-h-screen">
-      {/* 바다 배경 */}
+      {/* 테슬라 트럭 배경 */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")'
+          backgroundImage: 'url("https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")'
         }}
       />
       
       {/* 오버레이 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/50 via-blue-800/30 to-blue-900/50" />
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-gray-800/30 to-gray-900/50" />
       
       {/* 컨텐츠 */}
       <div className="relative z-10 p-6">
@@ -82,7 +82,7 @@ export default function Board() {
               placeholder="제목"
               value={newPost.title}
               onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-              className="w-full p-4 bg-white/10 rounded text-white placeholder-gray-300 border border-white/20 focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+              className="w-full p-4 bg-white/10 rounded text-white placeholder-gray-300 border border-white/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
               required
             />
           </div>
@@ -91,14 +91,14 @@ export default function Board() {
               placeholder="내용"
               value={newPost.content}
               onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-              className="w-full p-4 bg-white/10 rounded text-white placeholder-gray-300 border border-white/20 focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+              className="w-full p-4 bg-white/10 rounded text-white placeholder-gray-300 border border-white/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
               rows={4}
               required
             />
           </div>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-3 rounded font-medium hover:bg-blue-700 transition"
+            className="bg-red-600 text-white px-6 py-3 rounded font-medium hover:bg-red-700 transition"
           >
             게시하기
           </button>
@@ -122,12 +122,12 @@ export default function Board() {
                     placeholder="댓글을 입력하세요"
                     value={newComment[post.id] || ''}
                     onChange={(e) => setNewComment({ ...newComment, [post.id]: e.target.value })}
-                    className="flex-1 p-2 bg-white/10 rounded text-white placeholder-gray-300 border border-white/20 focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+                    className="flex-1 p-2 bg-white/10 rounded text-white placeholder-gray-300 border border-white/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
                     required
                   />
                   <button
                     type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700 transition"
+                    className="bg-red-600 text-white px-4 py-2 rounded font-medium hover:bg-red-700 transition"
                   >
                     댓글
                   </button>
