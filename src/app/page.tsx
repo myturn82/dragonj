@@ -1,74 +1,139 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
-      <section className="relative h-[500px]">
-        <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
-        <div className="absolute inset-0 flex items-center justify-center">
+    <div className="space-y-8">
+      {/* 메인 배너 */}
+      <div className="relative h-[400px] w-full">
+        <div className="absolute inset-0">
+          <Image
+            src="/main_banner.jpg"
+            alt="동행청소연구소 메인 배너"
+            fill
+            style={{ objectFit: 'cover' }}
+            priority
+            quality={100}
+          />
+        </div>
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="text-center text-white">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">동행청소연구소</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">동행청소연구소</h1>
             <p className="text-xl md:text-2xl">홈클리닝-기업클리닝(정기청소, 계단청소)</p>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Introduction Section */}
-      <section className="py-12">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">안녕하세요. 동행청소연구소 입니다.</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            정기청소 및 계단청소 전문기업입니다. 정기청소-사무실, 학원, 병원, 상가등
-            계단청소-빌라, 아파트, 상가등 말보다는 행동하는 모습으로 고객님이 원하는
-            모습을 보여드리겠습니다.
-          </p>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">서비스 소개</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-4">정기청소</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• 사무실 청소</li>
-                <li>• 학원 청소</li>
-                <li>• 병원 청소</li>
-                <li>• 상가 청소</li>
-              </ul>
+      {/* 서비스 소개 */}
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* 정기청소 */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold mb-4">정기청소</h2>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <Image
+                    src="/regular_cleaning.jpg"
+                    alt="정기청소"
+                    width={120}
+                    height={120}
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">사무실 청소</h3>
+                  <p className="text-gray-600">
+                    깨끗한 사무실 환경을 위한 전문적인 청소 서비스
+                  </p>
+                  <Link 
+                    href="/service"
+                    className="inline-block mt-2 text-blue-600 hover:text-blue-800"
+                  >
+                    자세히 보기 →
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-4">계단청소</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• 빌라 청소</li>
-                <li>• 아파트 청소</li>
-                <li>• 상가 청소</li>
-              </ul>
+          </div>
+
+          {/* 계단청소 */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold mb-4">계단청소</h2>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <Image
+                    src="/stair_cleaning.jpg"
+                    alt="계단청소"
+                    width={120}
+                    height={120}
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">아파트/빌라 청소</h3>
+                  <p className="text-gray-600">
+                    계단과 공용공간의 청결을 위한 전문 서비스
+                  </p>
+                  <Link 
+                    href="/service"
+                    className="inline-block mt-2 text-blue-600 hover:text-blue-800"
+                  >
+                    자세히 보기 →
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Contact Section */}
-      <section className="py-12">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">문의하기</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            언제든지 편하게 문의해주세요. 빠르고 친절하게 답변드리겠습니다.
+        {/* 최근 게시물 */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">최근 게시물</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <Image
+                  src={`/post_${item}.jpg`}
+                  alt={`게시물 ${item}`}
+                  width={400}
+                  height={250}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2">청소 서비스 후기 {item}</h3>
+                  <p className="text-gray-600 mb-4">
+                    정기청소 서비스를 이용한 고객님의 솔직한 후기입니다.
+                  </p>
+                  <Link 
+                    href={`/board/${item}`}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    자세히 보기 →
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 문의하기 섹션 */}
+        <div className="mt-12 bg-blue-50 rounded-lg p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">문의하기</h2>
+          <p className="text-gray-600 mb-6">
+            청소 서비스에 대해 궁금하신 점이 있으시면 언제든지 문의해주세요.
           </p>
-          <a
+          <Link
             href="/contact"
-            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition"
+            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             문의하기
-          </a>
+          </Link>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
