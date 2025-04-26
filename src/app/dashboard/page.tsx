@@ -10,54 +10,68 @@ export default function Dashboard() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Navigation */}
-      <nav className="bg-black/90 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex space-x-8">
+    <div className="relative min-h-screen bg-black text-white">
+      {/* 사이버트럭 배경 */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url("https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Homepage-Cybertruck-Desktop-NA.jpg")'
+        }}
+      />
+      
+      {/* 오버레이 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black/90" />
+      
+      {/* 컨텐츠 */}
+      <div className="relative z-10">
+        {/* Navigation */}
+        <nav className="bg-black/50 backdrop-blur-sm border-b border-white/10">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex justify-between h-16">
+              <div className="flex">
+                <div className="flex space-x-8">
+                  <button
+                    onClick={() => setActiveTab('calendar')}
+                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                      activeTab === 'calendar'
+                        ? 'border-red-600 text-white'
+                        : 'border-transparent text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    캘린더
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('board')}
+                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                      activeTab === 'board'
+                        ? 'border-red-600 text-white'
+                        : 'border-transparent text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    게시판
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center">
                 <button
-                  onClick={() => setActiveTab('calendar')}
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                    activeTab === 'calendar'
-                      ? 'border-red-600 text-white'
-                      : 'border-transparent text-gray-400 hover:text-white'
-                  }`}
+                  onClick={() => router.push('/')}
+                  className="text-gray-400 hover:text-white transition"
                 >
-                  캘린더
-                </button>
-                <button
-                  onClick={() => setActiveTab('board')}
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                    activeTab === 'board'
-                      ? 'border-red-600 text-white'
-                      : 'border-transparent text-gray-400 hover:text-white'
-                  }`}
-                >
-                  게시판
+                  로그아웃
                 </button>
               </div>
             </div>
-            <div className="flex items-center">
-              <button
-                onClick={() => router.push('/')}
-                className="text-gray-400 hover:text-white"
-              >
-                로그아웃
-              </button>
-            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-4 sm:py-6 px-2 sm:px-4">
-        <div className="w-full overflow-hidden">
-          {activeTab === 'calendar' && <Calendar />}
-          {activeTab === 'board' && <Board />}
-        </div>
-      </main>
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 py-8">
+          <div className="w-full overflow-hidden">
+            {activeTab === 'calendar' && <Calendar />}
+            {activeTab === 'board' && <Board />}
+          </div>
+        </main>
+      </div>
     </div>
   );
 } 

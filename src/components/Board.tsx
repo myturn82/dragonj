@@ -59,16 +59,23 @@ export default function Board() {
 
   return (
     <div className="relative min-h-screen">
-      {/* 테슬라 트럭 배경 */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-        style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")'
-        }}
-      />
+      {/* 사이버트럭 배경 동영상 */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Homepage-Cybertruck-Desktop-NA.jpg"
+      >
+        <source 
+          src="https://digitalassets.tesla.com/tesla-contents/video/upload/Homepage-Cybertruck-Desktop-NA.mp4" 
+          type="video/mp4" 
+        />
+      </video>
       
       {/* 오버레이 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-gray-800/30 to-gray-900/50" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80" />
       
       {/* 컨텐츠 */}
       <div className="relative z-10 p-6">
