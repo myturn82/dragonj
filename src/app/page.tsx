@@ -10,19 +10,16 @@ export default function Home() {
       <div className="relative h-[400px] w-full">
         <div className="absolute inset-0">
           <Image
-            src="/main_banner.jpg"
-            alt="동행청소연구소 메인 배너"
+            src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=1920&q=80"
+            alt="다이슨 청소기 메인 배너"
             fill
             style={{ objectFit: 'cover' }}
             priority
             quality={100}
+            sizes="100vw"
+            loading="eager"
+            unoptimized={true}
           />
-        </div>
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">동행청소연구소</h1>
-            <p className="text-xl md:text-2xl">홈클리닝-기업클리닝(정기청소, 계단청소)</p>
-          </div>
         </div>
       </div>
 
@@ -36,11 +33,13 @@ export default function Home() {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="/regular_cleaning.jpg"
-                    alt="정기청소"
+                    src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=240&q=80"
+                    alt="다이슨 무선 청소기"
                     width={120}
                     height={120}
                     className="rounded-lg"
+                    quality={90}
+                    sizes="(max-width: 768px) 100vw, 120px"
                   />
                 </div>
                 <div>
@@ -66,11 +65,13 @@ export default function Home() {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="/stair_cleaning.jpg"
-                    alt="계단청소"
+                    src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=240&q=80"
+                    alt="다이슨 무선 청소기"
                     width={120}
                     height={120}
                     className="rounded-lg"
+                    quality={90}
+                    sizes="(max-width: 768px) 100vw, 120px"
                   />
                 </div>
                 <div>
@@ -94,22 +95,24 @@ export default function Home() {
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-6">최근 게시물</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
+            {[1, 2, 3].map((index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
                 <Image
-                  src={`/post_${item}.jpg`}
-                  alt={`게시물 ${item}`}
+                  src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=400&q=80"
+                  alt={`다이슨 청소기 게시물 ${index}`}
                   width={400}
                   height={250}
                   className="w-full h-48 object-cover"
+                  quality={90}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">청소 서비스 후기 {item}</h3>
+                  <h3 className="text-lg font-semibold mb-2">청소 서비스 후기 {index}</h3>
                   <p className="text-gray-600 mb-4">
                     정기청소 서비스를 이용한 고객님의 솔직한 후기입니다.
                   </p>
                   <Link 
-                    href={`/board/${item}`}
+                    href={`/board/${index}`}
                     className="text-blue-600 hover:text-blue-800"
                   >
                     자세히 보기 →

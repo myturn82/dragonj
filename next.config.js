@@ -6,6 +6,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    domains: ['images.unsplash.com'],
+    unoptimized: true,
+  },
+  reactStrictMode: true,
 }
 
 module.exports = nextConfig 
