@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import Calendar from '@/components/Calendar';
 import Board from '@/components/Board';
+import Photos from '@/app/photos/page';
 import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('calendar');
@@ -11,6 +13,7 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-screen bg-black text-white">
+      <Navbar />
       {/* 사이버트럭 배경 */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -50,6 +53,16 @@ export default function Dashboard() {
                   >
                     게시판
                   </button>
+                  <button
+                    onClick={() => setActiveTab('photos')}
+                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                      activeTab === 'photos'
+                        ? 'border-red-600 text-white'
+                        : 'border-transparent text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    포토
+                  </button>
                 </div>
               </div>
               <div className="flex items-center">
@@ -69,6 +82,7 @@ export default function Dashboard() {
           <div className="w-full overflow-hidden">
             {activeTab === 'calendar' && <Calendar />}
             {activeTab === 'board' && <Board />}
+            {activeTab === 'photos' && <Photos />}
           </div>
         </main>
       </div>

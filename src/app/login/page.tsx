@@ -39,7 +39,6 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-md p-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">로그인</h1>
-          <p className="text-xl text-red-500 font-medium animate-pulse">송연우 사랑해~</p>
         </div>
         
         {error && (
