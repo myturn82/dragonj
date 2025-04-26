@@ -10,8 +10,8 @@ export default function Home() {
       <div className="relative h-[400px] w-full">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=1920&q=80"
-            alt="다이슨 청소기 메인 배너"
+            src="/main.png"
+            alt="동행청소연구소 메인 배너"
             fill
             style={{ objectFit: 'cover' }}
             priority
@@ -33,8 +33,8 @@ export default function Home() {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=240&q=80"
-                    alt="다이슨 무선 청소기"
+                    src="/dyson.png"
+                    alt="정기청소"
                     width={120}
                     height={120}
                     className="rounded-lg"
@@ -65,8 +65,8 @@ export default function Home() {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=240&q=80"
-                    alt="다이슨 무선 청소기"
+                    src="/dyson.png"
+                    alt="계단청소"
                     width={120}
                     height={120}
                     className="rounded-lg"
@@ -98,8 +98,8 @@ export default function Home() {
             {[1, 2, 3].map((index) => (
               <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1581094794329-c8112c4e0e0d?auto=format&fit=crop&w=400&q=80"
-                  alt={`다이슨 청소기 게시물 ${index}`}
+                  src="/dyson.png"
+                  alt={`게시물 ${index}`}
                   width={400}
                   height={250}
                   className="w-full h-48 object-cover"
