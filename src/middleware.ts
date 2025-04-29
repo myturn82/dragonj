@@ -9,23 +9,37 @@ export async function middleware(req: NextRequest) {
   // 세션 새로고침
   const { data: { session } } = await supabase.auth.getSession();
 
+  // 현재 경로
+  const currentPath = req.nextUrl.pathname;
+
+  // 정적 파일과 API 경로는 무시
+  if (
+    currentPath.startsWith('/_next') ||
+    currentPath.startsWith('/api') ||
+    currentPath.startsWith('/static') ||
+    currentPath === '/favicon.ico'
+  ) {
+    return res;
+  }
+
   // 공개 경로 목록
-  const publicPaths = ['/login', '/auth/callback', '/_next', '/favicon.ico', '/api'];
+  const publicPaths = ['/login', '/auth/callback', '/'];
 
-  // 현재 경로가 공개 경로인지 확인
-  const isPublicPath = publicPaths.some(path => req.nextUrl.pathname.startsWith(path));
+  // 공개 경로인 경우 세션 상태와 관계없이 접근 허용
+  if (publicPaths.some(path => currentPath === path)) {
+    return res;
+  }
 
-  // 로그인하지 않은 사용자가 보호된 페이지에 접근하려고 할 때
-  if (!session && !isPublicPath) {
+  // 로그인되지 않은 사용자가 보호된 경로에 접근하려는 경우
+  if (!session) {
     const redirectUrl = new URL('/login', req.url);
-    redirectUrl.searchParams.set('redirectedFrom', req.nextUrl.pathname);
+    redirectUrl.searchParams.set('redirectTo', currentPath);
     return NextResponse.redirect(redirectUrl);
   }
 
-  // 로그인한 사용자가 로그인 페이지에 접근하려고 할 때
-  if (session && req.nextUrl.pathname === '/login') {
-    const redirectUrl = new URL('/inquiries', req.url);
-    return NextResponse.redirect(redirectUrl);
+  // 로그인된 사용자가 로그인 페이지에 접근하려는 경우
+  if (session && currentPath === '/login') {
+    return NextResponse.redirect(new URL('/inquiry', req.url));
   }
 
   return res;
@@ -38,8 +52,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder
      */
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }; 
