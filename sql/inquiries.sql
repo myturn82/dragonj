@@ -12,10 +12,10 @@ CREATE TABLE inquiries (
 -- Add RLS (Row Level Security) policies
 ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
 
--- Allow anonymous users to insert inquiries
-CREATE POLICY "Allow anonymous insert" ON inquiries
+-- Allow authenticated users to insert inquiries
+CREATE POLICY "Allow authenticated insert" ON inquiries
     FOR INSERT
-    TO anon
+    TO authenticated
     WITH CHECK (true);
 
 -- Allow authenticated users to view all inquiries
