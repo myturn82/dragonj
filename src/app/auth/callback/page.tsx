@@ -1,45 +1,38 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-export default function AuthCallbackPage() {
+export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClientComponentClient();
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    const handleCallback = async () => {
-      try {
-        const { searchParams } = new URL(window.location.href);
-        const code = searchParams.get('code');
-        
-        if (!code) {
-          throw new Error('인증 코드가 없습니다.');
-        }
-
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        
-        if (error) {
-          throw error;
-        }
-
+    const code = searchParams.get('code');
+    if (!code) {
+      setErrorMsg('인증 코드가 없습니다. 다시 시도해주세요.');
+      router.replace('/login');
+      return;
+    }
+    const handleAuth = async () => {
+      console.log('Supabase OAuth code:', code);
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (!error) {
+        alert('로그인에 성공했습니다! 메인 페이지로 이동합니다.');
         router.replace('/');
-      } catch (error) {
-        console.error('Error:', error);
+      } else {
+        await supabase.auth.signOut();
+        alert('로그인 실패: ' + error.message + '\n로그인 페이지로 이동합니다.');
         router.replace('/login');
       }
     };
+    handleAuth();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    handleCallback();
-  }, [router, supabase]);
-
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-xl font-semibold">로그인 처리 중...</h2>
-        <p className="mt-2 text-sm text-gray-600">잠시만 기다려주세요.</p>
-      </div>
-    </div>
-  );
+  if (errorMsg) return <div>{errorMsg}</div>;
+  return <div>로그인 처리 중...</div>;
 } 

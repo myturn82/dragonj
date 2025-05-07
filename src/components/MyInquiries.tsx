@@ -104,11 +104,6 @@ export default function MyInquiries() {
     setEditForm({});
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
-  };
-
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
@@ -119,12 +114,6 @@ export default function MyInquiries() {
             className="text-indigo-600 hover:text-indigo-800"
           >
             새 문의 작성
-          </button>
-          <button
-            onClick={handleLogout}
-            className="text-gray-600 hover:text-gray-800"
-          >
-            로그아웃
           </button>
         </div>
       </div>
@@ -141,65 +130,43 @@ export default function MyInquiries() {
         <div className="text-center text-gray-500">문의 내역이 없습니다.</div>
       ) : (
         <div className="bg-white px-2 sm:px-6 py-2">
-          {inquiries.map((inquiry) => (
-            <div key={inquiry.id} className="py-6 border-b border-gray-200 last:border-b-0 flex flex-col gap-2">
-              {editingId === inquiry.id ? (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">제목</label>
-                    <input
-                      type="text"
-                      value={editForm.subject}
-                      onChange={(e) => setEditForm({ ...editForm, subject: e.target.value })}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">내용</label>
-                    <textarea
-                      value={editForm.message}
-                      onChange={(e) => setEditForm({ ...editForm, message: e.target.value })}
-                      rows={4}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleUpdate(inquiry.id)}
-                      className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-                    >
-                      저장
-                    </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
-                    >
-                      취소
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-[var(--foreground)]">{inquiry.subject}</div>
-                      <div className="mt-1 text-gray-700 whitespace-pre-line">{inquiry.message}</div>
-                      <div className="mt-2 text-xs text-gray-400 flex gap-2">
-                        {new Date(inquiry.created_at).toLocaleString()} · <button className="hover:underline">신고</button>
-                      </div>
+          <table className="w-full border-t border-gray-300 text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-2 text-left font-semibold">제목</th>
+                <th className="py-2 px-2 text-left font-semibold">작성자</th>
+                <th className="py-2 px-2 text-left font-semibold">날짜</th>
+                <th className="py-2 px-2 text-left font-semibold">상태</th>
+                <th className="py-2 px-2 text-left font-semibold">기능</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inquiries.map((inquiry) => (
+                <tr key={inquiry.id} className="border-b border-gray-200 hover:bg-gray-50">
+                  <td className="py-2 px-2 align-top whitespace-pre-line">{inquiry.subject}</td>
+                  <td className="py-2 px-2 align-top">{inquiry.name}</td>
+                  <td className="py-2 px-2 align-top text-xs text-gray-500">{new Date(inquiry.created_at).toLocaleDateString()}</td>
+                  <td className="py-2 px-2 align-top">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      inquiry.status === 'pending'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : inquiry.status === 'in_progress'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}>
+                      {inquiry.status === 'pending' ? '대기중' : inquiry.status === 'in_progress' ? '처리중' : '완료'}
+                    </span>
+                  </td>
+                  <td className="py-2 px-2 align-top">
+                    <div className="flex gap-2">
+                      <button onClick={() => handleEdit(inquiry)} className="px-2 py-1 border border-gray-300 rounded text-xs hover:bg-gray-100">수정</button>
+                      <button onClick={() => handleDelete(inquiry.id)} className="px-2 py-1 border border-gray-300 rounded text-xs hover:bg-gray-100">삭제</button>
                     </div>
-                    <button className="flex items-center border border-gray-300 rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-50 ml-2">
-                      <svg width="16" height="16" fill="none" stroke="currentColor" className="mr-1" viewBox="0 0 16 16"><path d="M8 14s6-4.35 6-7.5A3.5 3.5 0 0 0 8 3a3.5 3.5 0 0 0-6 3.5C2 9.65 8 14 8 14z"/></svg>
-                      0
-                    </button>
-                  </div>
-                  <div>
-                    <button className="mt-2 border border-gray-300 rounded px-3 py-1 text-xs text-gray-500 hover:bg-gray-50">답글</button>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

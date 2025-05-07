@@ -17,13 +17,14 @@ export async function middleware(req: NextRequest) {
     currentPath.startsWith('/_next') ||
     currentPath.startsWith('/api') ||
     currentPath.startsWith('/static') ||
-    currentPath === '/favicon.ico'
+    currentPath === '/favicon.ico' ||
+    currentPath.match(/\.(png|jpg|jpeg|gif|svg|webp|ico)$/) // 이미지 등 정적 파일 확장자 예외 추가
   ) {
     return res;
   }
 
   // 공개 경로 목록
-  const publicPaths = ['/login', '/auth/callback', '/'];
+  const publicPaths = ['/login', '/signup', '/auth/callback', '/'];
 
   // 공개 경로인 경우 세션 상태와 관계없이 접근 허용
   if (publicPaths.some(path => currentPath === path)) {

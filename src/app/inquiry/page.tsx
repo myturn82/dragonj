@@ -42,17 +42,6 @@ export default function InquiryPage() {
     fetchInquiries();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      router.push('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-      setError('로그아웃 중 오류가 발생했습니다.');
-    }
-  };
-
   const fetchInquiries = async () => {
     try {
       setLoading(true);
@@ -210,12 +199,6 @@ export default function InquiryPage() {
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               {showForm ? '취소' : '새 문의 작성'}
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            >
-              로그아웃
             </button>
           </div>
         </div>
