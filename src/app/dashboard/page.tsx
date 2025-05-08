@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Calendar from '@/components/Calendar';
 import Board from '@/components/Board';
 import Photos from '@/app/photos/page';
@@ -9,6 +9,14 @@ import Navbar from '@/components/Navbar';
 import { supabase } from '@/lib/supabase';
 
 export default function Dashboard() {
+  return (
+    <Suspense fallback={<div className="text-white text-center py-8">로딩 중...</div>}>
+      <DashboardInner />
+    </Suspense>
+  );
+}
+
+function DashboardInner() {
   const [activeTab, setActiveTab] = useState('calendar');
   const router = useRouter();
   const [message, setMessage] = useState('');
