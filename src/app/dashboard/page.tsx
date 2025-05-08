@@ -1,15 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from '@/components/Calendar';
 import Board from '@/components/Board';
 import Photos from '@/app/photos/page';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import { supabase } from '@/lib/supabase';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('calendar');
   const router = useRouter();
+  const [message, setMessage] = useState('');
+  const searchParams = useSearchParams();
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleGitHubLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        skipBrowserRedirect: false,
+      },
+    });
+    if (error) setMessage('GitHub 로그인 실패: ' + error.message);
+  };
+
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (!code) {
+      setErrorMsg('인증 코드가 없습니다. 다시 시도해주세요.');
+      router.replace('/login');
+      return;
+    }
+    const handleAuth = async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (!error) {
+        alert('로그인에 성공했습니다! 메인 페이지로 이동합니다.');
+        router.replace('/');
+      } else {
+        await supabase.auth.signOut();
+        alert('로그인 실패: ' + error.message + '\n로그인 페이지로 이동합니다.');
+        router.replace('/login');
+      }
+    };
+    handleAuth();
+  }, [searchParams, supabase, router]);
 
   return (
     <div className="relative min-h-screen bg-black text-white">

@@ -41,7 +41,10 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#fff]">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md flex flex-col gap-6">
         <div className="flex flex-col items-center mb-2">
-          <img src="/blog_logo.png" alt="동행청소연구소 로고" className="h-12 mb-4" />
+          <span className="font-bold text-lg px-6 py-1 border-2 border-black rounded-t-[12px] tracking-tight bg-white select-none whitespace-nowrap mb-4"
+            style={{ fontFamily: 'Pretendard, Arial, sans-serif', letterSpacing: '-0.02em', borderBottom: '0' }}>
+            Dragon.J's Project
+          </span>
           <h2 className="text-2xl font-bold mb-1">Welcome back</h2>
           <p className="text-gray-500 text-sm">Sign in to your account</p>
         </div>

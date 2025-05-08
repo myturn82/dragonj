@@ -22,6 +22,22 @@ module.exports = {
           },
         },
       },
+      fontFamily: {
+        sans: ['Pretendard Variable', 'Noto Sans KR', 'Arial', 'sans-serif'],
+      },
+      colors: {
+        primary: '#111',
+        secondary: '#fff',
+        accent: '#00FFD0',
+        gray: {
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#cccccc',
+          400: '#999999',
+          500: '#666666',
+          600: '#333333',
+        },
+      },
     },
   },
   plugins: [],
