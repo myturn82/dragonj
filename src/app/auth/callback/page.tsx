@@ -17,6 +17,8 @@ function AuthCallbackInner() {
   const searchParams = useSearchParams();
   const supabase = createClientComponentClient();
   const [errorMsg, setErrorMsg] = useState('');
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -33,21 +35,37 @@ function AuthCallbackInner() {
       return;
     }
     const handleAuth = async () => {
-      const { error, ...rest } = await supabase.auth.exchangeCodeForSession(code);
-      if (!error) {
-        console.log('로그인 성공:', rest);
-        window.location.replace('/');
-      } else {
-        console.log('로그인 실패:', error);
-        await supabase.auth.signOut();
-        alert('로그인 실패: ' + error.message + '\n다시 로그인 해주세요.\n로그인 페이지로 이동합니다.');
+      try {
+        const { error, data } = await supabase.auth.exchangeCodeForSession(code);
+        
+        if (!error) {
+          console.log('로그인 성공:', data);
+          window.location.replace('/');
+        } else {
+          if (error.status === 429 && retryCount < MAX_RETRIES) {
+            // Rate limit hit - implement exponential backoff
+            const backoffTime = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+            console.log(`Rate limit hit. Retrying in ${backoffTime/1000} seconds...`);
+            setErrorMsg(`요청이 너무 많습니다. ${backoffTime/1000}초 후 다시 시도합니다...`);
+            setRetryCount(prev => prev + 1);
+            setTimeout(handleAuth, backoffTime);
+          } else {
+            console.log('로그인 실패:', error);
+            await supabase.auth.signOut();
+            alert('로그인 실패: ' + error.message + '\n다시 로그인 해주세요.\n로그인 페이지로 이동합니다.');
+            router.replace('/login');
+          }
+        }
+      } catch (err) {
+        console.error('Unexpected error during authentication:', err);
+        setErrorMsg('예기치 않은 오류가 발생했습니다. 다시 시도해주세요.');
         router.replace('/login');
       }
     };
     handleAuth();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [retryCount]);
 
-  if (errorMsg) return <div>{errorMsg}<br/>로그인 중 새로고침하거나 시크릿 모드에서는 인증이 실패할 수 있습니다.</div>;
-  return <div>로그인 처리 중...<br/>로그인 중 새로고침하거나 시크릿 모드에서는 인증이 실패할 수 있습니다.</div>;
+  if (errorMsg) return <div className="text-center p-4">{errorMsg}</div>;
+  return <div className="text-center p-4">로그인 처리 중...<br/>잠시만 기다려주세요.</div>;
 } 
