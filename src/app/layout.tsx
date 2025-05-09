@@ -181,7 +181,7 @@ export default function RootLayout({
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <span className="font-bold text-base px-5 py-1 border-2 border-black rounded-[10px] tracking-tight bg-white select-none whitespace-nowrap"
                 style={{ fontFamily: 'Pretendard, Arial, sans-serif', letterSpacing: '-0.02em', borderBottom: '0' }}>
-                Dragon.J's Project
+                Dragon.J's Project_
               </span>
             </div>
             <div className="text-center md:text-right">
