@@ -58,7 +58,7 @@ export default function RootLayout({
             <Link href="/" className="flex items-center mr-10">
               <span className="font-bold text-lg px-6 py-1 border-2 border-black rounded-t-[12px] tracking-tight bg-white select-none whitespace-nowrap"
                 style={{ fontFamily: 'Pretendard, Arial, sans-serif', letterSpacing: '-0.02em', borderBottom: '0' }}>
-                Dragon.J's Project Dev
+                Dragon.J's Project
               </span>
             </Link>
             <ul className="hidden xl:flex gap-10 text-lg font-semibold text-[#1d1d1f] whitespace-nowrap">
