@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // 공개 경로 목록
-  const publicPaths = ['/login', '/signup', '/auth/callback', '/'];
+  const publicPaths = ['/login', '/signup', '/auth/callback', '/', '/inquiry'];
 
   // 공개 경로인 경우 세션 상태와 관계없이 접근 허용
   if (publicPaths.some(path => currentPath === path)) {
@@ -40,7 +40,7 @@ export async function middleware(req: NextRequest) {
 
   // 로그인된 사용자가 로그인 페이지에 접근하려는 경우
   if (session && currentPath === '/login') {
-    return NextResponse.redirect(new URL('/inquiry', req.url));
+    return NextResponse.redirect(new URL('/', req.url));
   }
 
   return res;

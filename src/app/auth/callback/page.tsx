@@ -40,7 +40,21 @@ function AuthCallbackInner() {
         
         if (!error) {
           console.log('로그인 성공:', data);
-          window.location.replace('/');
+          // 세션이 실제로 생성될 때까지 폴링 후 이동
+          let waited = 0;
+          const maxWait = 2000; // 최대 2초 대기
+          const pollSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session || waited >= maxWait) {
+              router.replace('/');
+            } else {
+              setTimeout(() => {
+                waited += 100;
+                pollSession();
+              }, 100);
+            }
+          };
+          pollSession();
         } else {
           if (error.status === 429 && retryCount < MAX_RETRIES) {
             // Rate limit hit - implement exponential backoff

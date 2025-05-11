@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bump Version on Save",
+      "type": "shell",
+      "command": "npm run bump-version && node scripts/set-version.js",
+      "problemMatcher": []
+    }
+  ]
+} 

@@ -1,12 +1,16 @@
 {
   "name": "todo-app",
-  "version": "0.1.0",
+  "version": "0.1.012",
   "private": true,
   "scripts": {
+    "predev": "npm run bump-version && node scripts/set-version.js",
+    "prebuild": "node scripts/set-version.js",
+    "prestart": "npm run bump-version && node scripts/set-version.js",
     "dev": "next dev",
     "build": "next build --no-lint",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "bump-version": "node scripts/bump-version.js"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.17",
