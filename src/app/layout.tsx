@@ -58,7 +58,10 @@ export default function RootLayout({
             <Link href="/" className="flex items-center mr-10">
               <span className="font-bold text-lg px-6 py-1 border-2 border-black rounded-t-[12px] tracking-tight bg-white select-none whitespace-nowrap"
                 style={{ fontFamily: 'Pretendard, Arial, sans-serif', letterSpacing: '-0.02em', borderBottom: '0' }}>
-                Dragon.J's Project Dev
+                Dragon.J's Project Prod
+
+
+              
               </span>
               <span className="ml-2 text-xs font-mono text-gray-500 align-middle">{process.env.NEXT_PUBLIC_APP_VERSION ? `V${process.env.NEXT_PUBLIC_APP_VERSION}` : 'V0.001'}</span>
             </Link>
