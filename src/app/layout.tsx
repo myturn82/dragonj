@@ -10,14 +10,16 @@ const inter = Inter({ subsets: ['latin'] });
 
 // 환경에 따라 서버 타입 표시
 function getServerLabel() {
-  if (typeof window !== 'undefined') return 'Local';
-  const branch = process.env.VERCEL_GIT_COMMIT_REF;
-  if (process.env.NODE_ENV === 'production') {
+  // Vercel 환경
+  if (process.env.VERCEL === '1') {
+    const branch = process.env.VERCEL_GIT_COMMIT_REF;
     if (branch === 'main') return 'Prod';
     if (branch === 'dev') return 'Dev';
-    return branch || 'Prod';
+    return branch || 'Vercel';
   }
+  // 로컬 개발환경
   if (process.env.NODE_ENV === 'development') return 'Local';
+  // 기타(테스트, 미설정 등)
   return 'Unknown';
 }
 
