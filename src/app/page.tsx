@@ -1,8 +1,27 @@
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { KOREAN_HOLIDAYS_2024 } from '@/lib/koreanHolidays';
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createServerComponentClient({ cookies });
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect('/login');
+  }
+
+  // 오늘이 공휴일인지 확인
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayHoliday = KOREAN_HOLIDAYS_2024.find(h => h.date === todayStr);
+
   return (
     <div>
+      {todayHoliday && (
+        <div className="bg-red-100 text-red-700 text-center py-2 font-bold">
+          오늘은 {todayHoliday.name}입니다. 즐거운 휴일 보내세요!
+        </div>
+      )}
       {/* 상단 네비게이션 */}
       {/* <header className="bg-white shadow">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-6">

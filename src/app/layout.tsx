@@ -8,6 +8,19 @@ import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// 환경에 따라 서버 타입 표시
+function getServerLabel() {
+  if (typeof window !== 'undefined') return 'Local';
+  const branch = process.env.VERCEL_GIT_COMMIT_REF;
+  if (process.env.NODE_ENV === 'production') {
+    if (branch === 'main') return 'Prod';
+    if (branch === 'dev') return 'Dev';
+    return branch || 'Prod';
+  }
+  if (process.env.NODE_ENV === 'development') return 'Local';
+  return 'Unknown';
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -21,13 +34,25 @@ export default function RootLayout({
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    const supabase = require('@supabase/auth-helpers-nextjs').createClientComponentClient();
+
     async function checkSession() {
-      const supabase = require('@supabase/auth-helpers-nextjs').createClientComponentClient();
       const { data: { session } } = await supabase.auth.getSession();
       setIsLoggedIn(!!session);
       setUserEmail(session?.user?.email ?? null);
     }
+
     checkSession();
+
+    // 인증 상태 변경 이벤트 구독
+    const { data: listener } = supabase.auth.onAuthStateChange((_event: any, _session: any) => {
+      checkSession();
+    });
+
+    // 언마운트 시 구독 해제
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -58,10 +83,7 @@ export default function RootLayout({
             <Link href="/" className="flex items-center mr-10">
               <span className="font-bold text-lg px-6 py-1 border-2 border-black rounded-t-[12px] tracking-tight bg-white select-none whitespace-nowrap"
                 style={{ fontFamily: 'Pretendard, Arial, sans-serif', letterSpacing: '-0.02em', borderBottom: '0' }}>
-                Dragon.J's Project Prod
-
-
-              
+                Dragon.J's Project <span className="ml-1 text-xs align-middle font-mono text-gray-500">{getServerLabel()}</span>
               </span>
               <span className="ml-2 text-xs font-mono text-gray-500 align-middle">{process.env.NEXT_PUBLIC_APP_VERSION ? `V${process.env.NEXT_PUBLIC_APP_VERSION}` : 'V0.001'}</span>
             </Link>
