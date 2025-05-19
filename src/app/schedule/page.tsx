@@ -582,15 +582,15 @@ export default function SchedulePage() {
             <textarea
               className="border px-3 py-2 rounded w-full text-sm mb-3 resize-y min-h-[56px]"
               placeholder="일정 제목/내용 입력..."
-              value={inputValue}
+              value={inputValue || ''}
               onChange={e => setInputValue(e.target.value)}
               autoFocus
             />
             <label className="block text-sm font-medium mb-1">기간</label>
             <div className="flex gap-2 mb-3">
-              <input type="date" value={inputStartDate} onChange={e => setInputStartDate(e.target.value)} className="border rounded px-2 py-1" />
+              <input type="date" value={inputStartDate || ''} onChange={e => setInputStartDate(e.target.value)} className="border rounded px-2 py-1" />
               <span className="self-center">~</span>
-              <input type="date" value={inputEndDate} onChange={e => setInputEndDate(e.target.value)} className="border rounded px-2 py-1" />
+              <input type="date" value={inputEndDate || ''} onChange={e => setInputEndDate(e.target.value)} className="border rounded px-2 py-1" />
             </div>
             <label className="block text-sm font-medium mb-1">시간</label>
             <div className="flex gap-2 mb-3 items-center">
@@ -602,7 +602,7 @@ export default function SchedulePage() {
                 <>
                   <select
                     className="border rounded px-3 py-2 text-sm min-w-[90px]"
-                    value={startTime}
+                    value={startTime || '09:00'}
                     onChange={e => setStartTime(e.target.value)}
                   >
                     {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
@@ -610,7 +610,7 @@ export default function SchedulePage() {
                   <span className="self-center text-xs">~</span>
                   <select
                     className="border rounded px-3 py-2 text-sm min-w-[90px]"
-                    value={endTime}
+                    value={endTime || '10:00'}
                     onChange={e => setEndTime(e.target.value)}
                   >
                     {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
@@ -618,16 +618,16 @@ export default function SchedulePage() {
                 </>
               ) : (
                 <>
-                  <input type="time" className="border rounded px-3 py-2 text-sm min-w-[90px]" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                  <input type="time" className="border rounded px-3 py-2 text-sm min-w-[90px]" value={startTime || '09:00'} onChange={e => setStartTime(e.target.value)} />
                   <span className="self-center text-xs">~</span>
-                  <input type="time" className="border rounded px-3 py-2 text-sm min-w-[90px]" value={endTime} onChange={e => setEndTime(e.target.value)} />
+                  <input type="time" className="border rounded px-3 py-2 text-sm min-w-[90px]" value={endTime || '10:00'} onChange={e => setEndTime(e.target.value)} />
                 </>
               )}
             </div>
             <label className="block text-sm font-medium mb-1">색상</label>
             <select
               className="border rounded px-3 py-2 text-sm min-w-[90px] mb-3"
-              value={inputColor}
+              value={inputColor || 'blue'}
               onChange={e => setInputColor(e.target.value)}
             >
               {colorOptions.map(opt => (
@@ -637,7 +637,7 @@ export default function SchedulePage() {
             <label className="block text-sm font-medium mb-1">반복</label>
             <select
               className="border rounded px-3 py-2 text-sm min-w-[90px] mb-3"
-              value={inputRepeat}
+              value={inputRepeat || 'none'}
               onChange={e => setInputRepeat(e.target.value)}
             >
               {repeatOptions.map(opt => (
@@ -671,7 +671,7 @@ export default function SchedulePage() {
                   <label className="block text-sm font-medium mb-1">제목</label>
                   <input
                     type="text"
-                    value={editInputValue}
+                    value={editInputValue || ''}
                     onChange={e => setEditInputValue(e.target.value)}
                     className="w-full border rounded px-3 py-2 mb-2"
                   />
@@ -679,9 +679,9 @@ export default function SchedulePage() {
                 <div className="mb-2">
                   <label className="block text-sm font-medium mb-1">기간</label>
                   <div className="flex gap-2 mb-2">
-                    <input type="date" value={editStartDate} onChange={e => setEditStartDate(e.target.value)} className="border rounded px-2 py-1" />
+                    <input type="date" value={editStartDate || ''} onChange={e => setEditStartDate(e.target.value)} className="border rounded px-2 py-1" />
                     <span className="self-center">~</span>
-                    <input type="date" value={editEndDate} onChange={e => setEditEndDate(e.target.value)} className="border rounded px-2 py-1" />
+                    <input type="date" value={editEndDate || ''} onChange={e => setEditEndDate(e.target.value)} className="border rounded px-2 py-1" />
                   </div>
                 </div>
                 <div className="mb-2">
@@ -693,19 +693,19 @@ export default function SchedulePage() {
                   <div className="flex gap-2 mb-3">
                     {editTimeMode === 'select' ? (
                       <>
-                        <select value={editStartTime} onChange={e => setEditStartTime(e.target.value)} className="border rounded px-2 py-1">
+                        <select value={editStartTime || '09:00'} onChange={e => setEditStartTime(e.target.value)} className="border rounded px-2 py-1">
                           {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                         <span className="self-center">~</span>
-                        <select value={editEndTime} onChange={e => setEditEndTime(e.target.value)} className="border rounded px-2 py-1">
+                        <select value={editEndTime || '10:00'} onChange={e => setEditEndTime(e.target.value)} className="border rounded px-2 py-1">
                           {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                       </>
                     ) : (
                       <>
-                        <input type="time" className="border rounded px-2 py-1" value={editStartTime} onChange={e => setEditStartTime(e.target.value)} />
+                        <input type="time" className="border rounded px-2 py-1" value={editStartTime || '09:00'} onChange={e => setEditStartTime(e.target.value)} />
                         <span className="self-center">~</span>
-                        <input type="time" className="border rounded px-2 py-1" value={editEndTime} onChange={e => setEditEndTime(e.target.value)} />
+                        <input type="time" className="border rounded px-2 py-1" value={editEndTime || '10:00'} onChange={e => setEditEndTime(e.target.value)} />
                       </>
                     )}
                   </div>
@@ -714,7 +714,7 @@ export default function SchedulePage() {
                   <label className="block text-sm font-medium mb-1">색상</label>
                   <select
                     className="border rounded px-3 py-2 text-sm min-w-[90px] mb-3"
-                    value={editColor}
+                    value={editColor || 'blue'}
                     onChange={e => setEditColor(e.target.value)}
                   >
                     {colorOptions.map(opt => (
@@ -726,7 +726,7 @@ export default function SchedulePage() {
                   <label className="block text-sm font-medium mb-1">반복</label>
                   <select
                     className="border rounded px-3 py-2 text-sm min-w-[90px] mb-3"
-                    value={editRepeat}
+                    value={editRepeat || 'none'}
                     onChange={e => setEditRepeat(e.target.value)}
                     disabled
                   >

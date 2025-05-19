@@ -110,7 +110,8 @@ export default function RootLayout({
             <div className="flex items-center gap-4">
               <div className="relative xl:hidden">
                 <button
-                  className="p-2 h-[32px] flex items-center justify-center"
+                  className="p-2 h-[32px] flex items-center justify-center focus:outline-none border-none"
+                  style={{ border: 'none' }}
                   aria-label="메뉴 토글"
                   tabIndex={0}
                   onClick={() => setIsMenuOpen((v) => !v)}
