@@ -1,7 +1,7 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { KOREAN_HOLIDAYS_2024 } from '@/lib/koreanHolidays';
+import { fetchKoreanHolidays } from '@/lib/koreanHolidays';
 
 export default async function Home() {
   const supabase = createServerComponentClient({ cookies });
@@ -13,7 +13,8 @@ export default async function Home() {
 
   // 오늘이 공휴일인지 확인
   const todayStr = new Date().toISOString().slice(0, 10);
-  const todayHoliday = KOREAN_HOLIDAYS_2024.find(h => h.date === todayStr);
+  const holidays = await fetchKoreanHolidays(new Date().getFullYear());
+  const todayHoliday = holidays.find(h => h.date === todayStr);
 
   return (
     <div>

@@ -13,6 +13,7 @@ function getServerLabel() {
   // Vercel 환경
   if (process.env.VERCEL === '1') {
     const branch = process.env.VERCEL_GIT_COMMIT_REF;
+    console.log("123213 = ", branch); 
     if (branch === 'main') return 'Prod';
     if (branch === 'dev') return 'Dev';
     return branch || 'Vercel';
@@ -34,6 +35,7 @@ export default function RootLayout({
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const branch = process.env.VERCEL_GIT_COMMIT_REF || '';
 
   useEffect(() => {
     const supabase = require('@supabase/auth-helpers-nextjs').createClientComponentClient();
@@ -76,6 +78,10 @@ export default function RootLayout({
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    if (branch) alert(`branch: ${branch}`);
+  }, []);
 
   return (
     <html lang="ko">
