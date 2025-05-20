@@ -1,6 +1,6 @@
 {
   "name": "todo-app",
-  "version": "0.1.016",
+  "version": "0.1.018",
   "private": true,
   "scripts": {
     "predev": "npm run bump-version && node scripts/set-version.js",

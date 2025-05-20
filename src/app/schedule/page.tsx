@@ -44,6 +44,92 @@ const cellStyle = {
   padding: '4px',
 };
 
+// MiniCalendar 유틸 함수 및 컴포넌트 추가
+function getMiniMonthMatrix(year: number, month: number) {
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const matrix = [];
+  let week = [];
+  let day = new Date(firstDay);
+  day.setDate(day.getDate() - day.getDay());
+  for (let i = 0; i < 6 * 7; i++) {
+    week.push(new Date(day));
+    if (week.length === 7) {
+      matrix.push(week);
+      week = [];
+    }
+    day.setDate(day.getDate() + 1);
+  }
+  return matrix;
+}
+
+interface MiniCalendarProps {
+  year: number;
+  month: number;
+  today: Date;
+  holidays: Record<string, string>;
+  schedules: Record<string, any[]>;
+}
+
+function MiniCalendar({ year, month, today, holidays, schedules }: MiniCalendarProps) {
+  const matrix = getMiniMonthMatrix(year, month);
+  function formatDate(date: Date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  return (
+    <div className="bg-white rounded-lg shadow border p-2 w-[160px] mb-4">
+      <div className="text-center font-bold mb-2 text-base text-gray-800">{month + 1}월</div>
+      <table className="w-full border-collapse text-xs">
+        <thead>
+          <tr>
+            {['일', '월', '화', '수', '목', '금', '토'].map((d, i) => (
+              <th key={d} className={`py-1 text-center font-bold select-none ${i === 0 ? 'text-red-500' : i === 6 ? 'text-blue-500' : 'text-gray-700'}`}>{d}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {matrix.map((week, i) => (
+            <tr key={i}>
+              {week.map((date, j) => {
+                const isThisMonth = date.getMonth() === month;
+                const isToday = date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
+                const key = formatDate(date);
+                const holidayName = holidays[key];
+                const daySchedules = schedules[key] || [];
+                return (
+                  <td
+                    key={j}
+                    className={`align-top text-center px-0.5 py-0.5 ${isThisMonth ? '' : 'bg-gray-50 text-gray-300'} ${isToday ? 'border-2 border-blue-400 z-10' : ''}`}
+                    style={{ minWidth: 18, height: 28, borderRadius: 6, position: 'relative' }}
+                  >
+                    <div className="flex flex-col items-center">
+                      <span className={`block font-bold text-xs leading-none ${date.getDay() === 0 ? 'text-red-500' : date.getDay() === 6 ? 'text-blue-500' : ''}`}>{date.getDate()}</span>
+                      {/* 휴일 점 */}
+                      {holidayName && <span className="block w-1.5 h-1.5 rounded-full bg-red-500 mt-0.5"></span>}
+                      {/* 스케줄 점 */}
+                      {daySchedules.length > 0 && (
+                        <span className="flex gap-0.5 mt-0.5">
+                          {daySchedules.slice(0, 3).map((s, idx) => (
+                            <span key={idx} className={`w-1.5 h-1.5 rounded-full ${s.color ? `bg-${s.color}-500` : 'bg-blue-500'}`}></span>
+                          ))}
+                          {daySchedules.length > 3 && <span className="text-[8px] text-gray-400 ml-0.5">+{daySchedules.length - 3}</span>}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function SchedulePage() {
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -429,144 +515,177 @@ export default function SchedulePage() {
 
   // 2. 월간 뷰 렌더링: 날짜 셀 내부에 bar(스케줄) 렌더링
   return (
-    <div className="max-w-5xl mx-auto py-8 px-2">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2 sm:gap-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <button onClick={handlePrevMonth} className="w-10 h-10 flex items-center justify-center rounded border border-gray-400 hover:bg-gray-200 text-2xl">&#60;</button>
-          <button onClick={handleToday} className="w-10 h-10 flex items-center justify-center rounded border border-gray-400 hover:bg-gray-200 font-semibold">오늘</button>
-          <button onClick={handleNextMonth} className="w-10 h-10 flex items-center justify-center rounded border border-gray-400 hover:bg-gray-200 text-2xl">&#62;</button>
-          <span className="ml-4 text-xl font-bold">
-            <span className="cursor-pointer hover:underline" onClick={() => setYearlyView(true)}>{year}년</span> {month + 1}월
-          </span>
+    <div className="w-full min-h-screen max-w-none p-0 m-0" style={{ boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: 24, width: '100%', height: '100%' }}>
+        <div style={{ minWidth: 160, display: 'flex', flexDirection: 'column', gap: 12, height: '100%', overflowY: 'auto' }}>
+          <MiniCalendar year={month - 1 < 0 ? year - 1 : year} month={month - 1 < 0 ? 11 : month - 1} today={today} holidays={holidays} schedules={schedules} />
+          <MiniCalendar year={month + 1 > 11 ? year + 1 : year} month={month + 1 > 11 ? 0 : month + 1} today={today} holidays={holidays} schedules={schedules} />
         </div>
-        <div className="flex items-center gap-2">
-          <label className="bg-gray-200 px-3 py-2 rounded cursor-pointer text-sm font-semibold hover:bg-gray-300">
-            구글 캘린더 가져오기
-            <input type="file" accept=".ics" onChange={handleIcsUpload} className="hidden" />
-          </label>
-        </div>
-        <input
-          type="text"
-          placeholder="일정 검색..."
-          value={searchKeyword}
-          onChange={e => setSearchKeyword(e.target.value)}
-          className="border rounded px-3 py-2 text-sm min-w-[120px] sm:min-w-[180px] ml-0 sm:ml-4 w-full sm:w-auto"
-        />
-      </div>
-      <div className="overflow-x-auto">
-        <table className="bg-white rounded-t-lg overflow-hidden border-collapse min-w-[600px] w-full text-xs sm:text-sm" style={{ tableLayout: 'fixed' }}>
-          <thead>
-            <tr>
-              {WEEKDAYS.map((d, i) => (
-                <th key={d} style={{ height: '64px', minWidth: '80px', verticalAlign: 'top', padding: '4px' }} className={`text-center font-bold border-b border-r select-none ${i === 0 ? 'text-red-500' : i === 6 ? 'text-blue-500' : 'text-gray-700'}`}>{d}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {monthMatrix.map((week, weekIdx) => (
-              <tr key={weekIdx}>
-                {week.map((date, col) => {
-                  const isThisMonth = date.getMonth() === month;
-                  const isToday = formatDate(date) === formatDate(today);
-                  const isSelected = selectedDate && formatDate(date) === formatDate(selectedDate);
-                  const holidayName = holidays[formatDate(date)];
-                  // 해당 날짜에 걸친 모든 bar(스케줄) 찾기
-                  const dayBars = filteredSchedules[formatDate(date)] || [];
-                  return (
-                    <td
-                      key={col}
-                      style={{ height: '64px', minWidth: '80px', verticalAlign: 'top', padding: '4px' }}
-                      className={`border-b border-r align-top group transition-all ${isThisMonth ? '' : 'bg-gray-50 text-gray-300'} ${isToday ? 'border-2 border-blue-400 z-10' : ''} ${isSelected ? 'bg-blue-50' : ''}`}
-                      onClick={e => {
-                        e.stopPropagation();
-                        setSelectedDate(date);
-                        setShowInput(true);
-                        setInputValue('');
-                        setStartTime('09:00');
-                        setEndTime('10:00');
-                        setInputStartDate(formatDate(date));
-                        setInputEndDate(formatDate(date));
-                      }}
-                      onDragOver={e => {
-                        if (draggedSchedule) e.preventDefault();
-                      }}
-                      onDrop={async e => {
-                        if (!draggedSchedule) return;
-                        const oldStart = new Date(draggedSchedule.start_date);
-                        const oldEnd = new Date(draggedSchedule.end_date);
-                        const newStart = new Date(formatDate(date));
-                        const diff = (oldEnd.getTime() - oldStart.getTime()) / (1000 * 60 * 60 * 24);
-                        const newEnd = new Date(newStart);
-                        newEnd.setDate(newEnd.getDate() + diff);
-                        // DB 업데이트
-                        const { error } = await supabase.from('schedules')
-                          .update({
-                            start_date: formatDate(newStart),
-                            end_date: formatDate(newEnd),
-                          })
-                          .eq('id', draggedSchedule.id)
-                          .eq('user_id', userId);
-                        if (!error) {
-                          // UI 갱신
-                          if (userId) {
-                            const { data: newData, error: fetchError } = await supabase.from('schedules').select('*').eq('user_id', userId);
-                            if (!fetchError && newData) {
-                              const byDate: Record<string, any[]> = {};
-                              newData.forEach(sch => {
-                                let d = new Date(sch.start_date);
-                                const end = new Date(sch.end_date);
-                                while (d <= end) {
-                                  const key = formatDate(d);
-                                  if (!byDate[key]) byDate[key] = [];
-                                  byDate[key].push(sch);
-                                  d.setDate(d.getDate() + 1);
+        <div style={{ flex: 1, minWidth: 0, width: '100%', maxWidth: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 'none', minHeight: 56, maxHeight: 80 }}>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2 sm:gap-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button onClick={handlePrevMonth} className="w-10 h-10 flex items-center justify-center rounded border border-gray-400 hover:bg-gray-200 text-2xl">&#60;</button>
+                  <button onClick={handleToday} className="w-18 h-10 flex items-center justify-center rounded border border-gray-400 hover:bg-gray-200 font-semibold whitespace-nowrap">오늘</button>
+                  <button onClick={handleNextMonth} className="w-10 h-10 flex items-center justify-center rounded border border-gray-400 hover:bg-gray-200 text-2xl">&#62;</button>
+                  <span className="ml-4 text-xl font-bold">
+                    <span className="cursor-pointer hover:underline" onClick={() => setYearlyView(true)}>{year}년</span> {month + 1}월
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="bg-gray-200 px-3 py-2 rounded cursor-pointer text-sm font-semibold hover:bg-gray-300">
+                    구글 캘린더 가져오기
+                    <input type="file" accept=".ics" onChange={handleIcsUpload} className="hidden" />
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  placeholder="일정 검색..."
+                  value={searchKeyword}
+                  onChange={e => setSearchKeyword(e.target.value)}
+                  className="border rounded px-3 py-2 text-sm min-w-[120px] sm:min-w-[180px] ml-0 sm:ml-4 w-full sm:w-auto"
+                />
+              </div>
+            </div>
+            <div
+              className="overflow-x-auto w-full"
+              style={{
+                maxHeight: 'calc(100dvh - 120px)', // 버튼라인+마진 높이만큼 빼기
+                overflowY: 'auto',
+              }}
+            >
+              <table
+                className="bg-white rounded-t-lg overflow-hidden border-collapse w-full max-w-full text-xs sm:text-sm"
+                style={{
+                  tableLayout: 'fixed',
+                  minWidth: 180,
+                  maxWidth: '100%',
+                  width: '100%',
+                  height: 'auto',
+                }}
+              >
+                <thead>
+                  <tr>
+                    {WEEKDAYS.map((d, i) => (
+                      <th
+                        key={d}
+                        style={{ height: '36px', minWidth: '48px', verticalAlign: 'middle', padding: '2px 0' }}
+                        className={`text-center font-bold border-b border-r select-none ${i === 0 ? 'text-red-500' : i === 6 ? 'text-blue-500' : 'text-gray-700'}`}
+                      >
+                        {d}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {monthMatrix.map((week, weekIdx) => (
+                    <tr key={weekIdx}>
+                      {week.map((date, col) => {
+                        const isThisMonth = date.getMonth() === month;
+                        const isToday = formatDate(date) === formatDate(today);
+                        const isSelected = selectedDate && formatDate(date) === formatDate(selectedDate);
+                        const holidayName = holidays[formatDate(date)];
+                        // 해당 날짜에 걸친 모든 bar(스케줄) 찾기
+                        const dayBars = filteredSchedules[formatDate(date)] || [];
+                        return (
+                          <td
+                            key={col}
+                            style={{ height: '64px', minWidth: '80px', verticalAlign: 'top', padding: '4px' }}
+                            className={`border-b border-r align-top group transition-all ${isThisMonth ? '' : 'bg-gray-50 text-gray-300'} ${isToday ? 'border-2 border-blue-400 z-10' : ''} ${isSelected ? 'bg-blue-50' : ''}`}
+                            onClick={e => {
+                              e.stopPropagation();
+                              setSelectedDate(date);
+                              setShowInput(true);
+                              setInputValue('');
+                              setStartTime('09:00');
+                              setEndTime('10:00');
+                              setInputStartDate(formatDate(date));
+                              setInputEndDate(formatDate(date));
+                            }}
+                            onDragOver={e => {
+                              if (draggedSchedule) e.preventDefault();
+                            }}
+                            onDrop={async e => {
+                              if (!draggedSchedule) return;
+                              const oldStart = new Date(draggedSchedule.start_date);
+                              const oldEnd = new Date(draggedSchedule.end_date);
+                              const newStart = new Date(formatDate(date));
+                              const diff = (oldEnd.getTime() - oldStart.getTime()) / (1000 * 60 * 60 * 24);
+                              const newEnd = new Date(newStart);
+                              newEnd.setDate(newEnd.getDate() + diff);
+                              // DB 업데이트
+                              const { error } = await supabase.from('schedules')
+                                .update({
+                                  start_date: formatDate(newStart),
+                                  end_date: formatDate(newEnd),
+                                })
+                                .eq('id', draggedSchedule.id)
+                                .eq('user_id', userId);
+                              if (!error) {
+                                // UI 갱신
+                                if (userId) {
+                                  const { data: newData, error: fetchError } = await supabase.from('schedules').select('*').eq('user_id', userId);
+                                  if (!fetchError && newData) {
+                                    const byDate: Record<string, any[]> = {};
+                                    newData.forEach(sch => {
+                                      let d = new Date(sch.start_date);
+                                      const end = new Date(sch.end_date);
+                                      while (d <= end) {
+                                        const key = formatDate(d);
+                                        if (!byDate[key]) byDate[key] = [];
+                                        byDate[key].push(sch);
+                                        d.setDate(d.getDate() + 1);
+                                      }
+                                    });
+                                    setSchedules(byDate);
+                                  }
                                 }
-                              });
-                              setSchedules(byDate);
-                            }
-                          }
-                        } else {
-                          alert('이동 실패: ' + error.message);
-                        }
-                        setDraggedSchedule(null);
-                      }}
-                    >
-                      <div className="flex items-center gap-1 mb-1">
-                        <span className={`text-xs font-bold ${date.getDay() === 0 ? 'text-red-500' : date.getDay() === 6 ? 'text-blue-500' : ''}`}>{date.getDate()}</span>
-                        {holidayName && <span className="ml-1 text-[10px] px-1 py-0.5 rounded bg-red-100 text-red-600 font-semibold">{holidayName}</span>}
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        {dayBars.map((sch, i) => {
-                          const isStart = formatDate(date) === sch.start_date;
-                          const isEnd = formatDate(date) === sch.end_date;
-                          return (
-                            <div
-                              key={sch.id + '-' + i}
-                              draggable
-                              onDragStart={e => {
-                                setDraggedSchedule(sch);
-                                e.dataTransfer.effectAllowed = 'move';
-                              }}
-                              onDragEnd={() => setDraggedSchedule(null)}
-                              className={`text-xs font-medium px-2 py-1 truncate cursor-pointer flex-1 ${sch.color ? `bg-${sch.color}-100 text-${sch.color}-700` : 'bg-blue-100 text-blue-700'} ${isStart ? 'rounded-l-full' : ''} ${isEnd ? 'rounded-r-full' : ''}`}
-                              style={{ margin: '1px 0', minHeight: '22px', borderRadius: isStart && isEnd ? '9999px' : isStart ? '9999px 0 0 9999px' : isEnd ? '0 9999px 9999px 0' : '0' }}
-                              onClick={e => {
-                                e.stopPropagation();
-                                setDetailSchedule(sch);
-                              }}
-                            >
-                              {sch.title}
+                              } else {
+                                alert('이동 실패: ' + error.message);
+                              }
+                              setDraggedSchedule(null);
+                            }}
+                          >
+                            <div className="flex items-center gap-1 mb-1">
+                              <span className={`text-xs font-bold ${date.getDay() === 0 ? 'text-red-500' : date.getDay() === 6 ? 'text-blue-500' : ''}`}>{date.getDate()}</span>
+                              {holidayName && <span className="ml-1 text-[10px] px-1 py-0.5 rounded bg-red-100 text-red-600 font-semibold">{holidayName}</span>}
                             </div>
-                          );
-                        })}
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                            <div className="flex flex-col gap-1">
+                              {dayBars.map((sch, i) => {
+                                const isStart = formatDate(date) === sch.start_date;
+                                const isEnd = formatDate(date) === sch.end_date;
+                                return (
+                                  <div
+                                    key={sch.id + '-' + i}
+                                    draggable
+                                    onDragStart={e => {
+                                      setDraggedSchedule(sch);
+                                      e.dataTransfer.effectAllowed = 'move';
+                                    }}
+                                    onDragEnd={() => setDraggedSchedule(null)}
+                                    className={`text-xs font-medium px-2 py-1 truncate cursor-pointer flex-1 ${sch.color ? `bg-${sch.color}-100 text-${sch.color}-700` : 'bg-blue-100 text-blue-700'} ${isStart ? 'rounded-l-full' : ''} ${isEnd ? 'rounded-r-full' : ''}`}
+                                    style={{ margin: '1px 0', minHeight: '22px', borderRadius: isStart && isEnd ? '9999px' : isStart ? '9999px 0 0 9999px' : isEnd ? '0 9999px 9999px 0' : '0' }}
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      setDetailSchedule(sch);
+                                    }}
+                                  >
+                                    {sch.title}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
       {showInput && (
         <div
@@ -832,6 +951,16 @@ export default function SchedulePage() {
           </div>
         </div>
       )}
+      <style jsx global>{`
+        html, body {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          width: 100vw;
+          min-height: 100dvh;
+          overflow-x: hidden;
+        }
+      `}</style>
     </div>
   );
 } 
