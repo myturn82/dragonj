@@ -79,12 +79,31 @@ export default function RootLayout({
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // 햄버거 메뉴 열릴 때 body 스크롤 방지
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
   useEffect(() => {
     if (branch) alert(`branch: ${branch}`);
   }, []);
 
   return (
     <html lang="ko">
+      <head>
+        <style jsx global>{`
+          body${isMenuOpen ? '' : ''} {
+            ${isMenuOpen ? 'overflow: hidden !important;' : ''}
+          }
+        `}</style>
+      </head>
       <body
         className={`${inter.className} bg-[var(--background)] text-[var(--foreground)] flex flex-col min-h-screen w-full`}
         style={{
@@ -96,21 +115,23 @@ export default function RootLayout({
           position: 'relative',
         }}
       >
-        {/* 화이트 투명 오버레이 */}
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            width: '100vw',
-            height: '100vh',
-            background: 'rgba(99, 97, 97, 0.51)',
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        />
+        {/* 화이트 투명 오버레이: 메뉴가 열려있지 않을 때만 렌더링 */}
+        {!isMenuOpen && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              width: '100vw',
+              height: '100vh',
+              background: 'rgba(99, 97, 97, 0.51)',
+              zIndex: 0,
+              pointerEvents: 'none',
+            }}
+          />
+        )}
         {/* 실제 컨텐츠 */}
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <header className="bg-[#ffffff] border-b border-gray-200 sticky top-0 z-50 w-full min-w-0 max-w-none px-0 overflow-x-auto">
+          <header className="bg-[#ffffff] border-b border-gray-200 sticky top-0 z-50 w-full min-w-0 max-w-none px-0">
             <nav className="w-full min-w-0 max-w-none flex items-center justify-between h-[64px] px-4 sm:px-8 md:px-10 mx-auto" style={{ maxWidth: 1440 }}>
               <Link href="/" className="flex items-center mr-10">
                 <span className="font-bold text-lg px-6 py-1 border-2 border-black rounded-t-[12px] tracking-tight bg-white select-none whitespace-nowrap"
@@ -154,7 +175,8 @@ export default function RootLayout({
                   {isMenuOpen && (
                     <div
                       ref={menuRef}
-                      className="absolute right-0 top-[48px] w-max bg-white shadow-lg rounded-b-2xl animate-fade-in z-50"
+                      className="absolute right-0 top-[48px] w-max bg-white shadow-lg rounded-b-2xl animate-fade-in"
+                      style={{ zIndex: 100 }}
                       tabIndex={-1}
                       onKeyDown={handleMenuKeyDown}
                     >
