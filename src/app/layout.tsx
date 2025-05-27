@@ -153,15 +153,15 @@ export default function RootLayout({
                 <li><Link href="/truck" className="hover:text-[var(--primary)] transition whitespace-nowrap">트럭게임</Link></li>
               </ul>
               <div className="flex items-center gap-4">
-                <div className="relative xl:hidden">
+                <div className="relative xl:hidden" ref={menuRef}>
                   <button
                     className="p-2 h-[32px] flex items-center justify-center focus:outline-none border-none"
                     style={{ border: 'none' }}
                     aria-label="메뉴 토글"
                     tabIndex={0}
-                    onClick={() => setIsMenuOpen((v) => !v)}
+                    onClick={() => isMenuOpen ? setIsMenuOpen(false) : setIsMenuOpen(true)}
                     onKeyDown={e => {
-                      if (e.key === 'Enter' || e.key === ' ') setIsMenuOpen((v) => !v);
+                      if (e.key === 'Enter' || e.key === ' ') isMenuOpen ? setIsMenuOpen(false) : setIsMenuOpen(true);
                     }}
                   >
                     <svg className="w-7 h-7" fill="none" stroke="#1d1d1f" strokeWidth="2" viewBox="0 0 24 24">
@@ -174,7 +174,6 @@ export default function RootLayout({
                   </button>
                   {isMenuOpen && (
                     <div
-                      ref={menuRef}
                       className="absolute right-0 top-[48px] w-max bg-white shadow-lg rounded-b-2xl animate-fade-in"
                       style={{ zIndex: 100 }}
                       tabIndex={-1}

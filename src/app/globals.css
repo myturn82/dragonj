@@ -27,6 +27,12 @@ button:hover {
   color: #fff;
 }
 
+/* 햄버거 버튼 호버시 배경색 유지 */
+button.p-2.h-\[32px\].flex.items-center.justify-center:hover {
+  background: transparent !important;
+  color: inherit !important;
+}
+
 input, textarea {
   border: none;
   border-bottom: 2px solid #111;

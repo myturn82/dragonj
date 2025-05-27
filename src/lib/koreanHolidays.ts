@@ -5,13 +5,19 @@ export const MANUAL_KR_HOLIDAYS = [
 ];
 
 export async function fetchKoreanHolidays(year: number): Promise<{ date: string; name: string }[]> {
-  const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/KR`);
-  if (!res.ok) throw new Error('공휴일 API 오류');
-  const data = await res.json();
-  // Nager.Date API의 localName을 name으로 변환
-  const apiHolidays = data.map((h: any) => ({ date: h.date, name: h.localName }));
-  // 수동 공휴일 병합 (해당 연도만)
-  const manual = MANUAL_KR_HOLIDAYS.filter(h => h.date.startsWith(`${year}-`));
-  return [...apiHolidays, ...manual];
+  try {
+    const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/KR`);
+    if (!res.ok) throw new Error('공휴일 API 오류');
+    const data = await res.json();
+    // Nager.Date API의 localName을 name으로 변환
+    const apiHolidays = data.map((h: any) => ({ date: h.date, name: h.localName }));
+    // 수동 공휴일 병합 (해당 연도만)
+    const manual = MANUAL_KR_HOLIDAYS.filter(h => h.date.startsWith(`${year}-`));
+    return [...apiHolidays, ...manual];
+  } catch (e) {
+    console.error('fetchKoreanHolidays error:', e);
+    // 실패 시 수동 공휴일만 반환
+    return MANUAL_KR_HOLIDAYS.filter(h => h.date.startsWith(`${year}-`));
+  }
 }
 

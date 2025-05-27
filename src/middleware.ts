@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // 공개 경로 목록
-  const publicPaths = ['/login', '/signup', '/auth/callback', '/', '/inquiry'];
+  const publicPaths = ['/login', '/signup', '/auth/callback', '/', '/inquiry', '/reset-password'];
 
   // 공개 경로인 경우 세션 상태와 관계없이 접근 허용
   if (publicPaths.some(path => currentPath === path)) {
