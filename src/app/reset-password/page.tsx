@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function ResetPasswordPage() {
+function ResetPasswordClient() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [message, setMessage] = useState("");
@@ -71,5 +71,13 @@ export default function ResetPasswordPage() {
         {message && <div className="text-center text-sm mt-2 text-blue-600">{message}</div>}
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense>
+      <ResetPasswordClient />
+    </Suspense>
   );
 } 
