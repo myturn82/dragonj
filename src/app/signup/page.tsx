@@ -29,18 +29,6 @@ export default function SignUpPage() {
       setMessage("회원가입 실패: " + error.message);
       return;
     }
-    // 2. user_profile 테이블에 추가 정보 저장
-    if (data.user) {
-      const { error: profileError } = await supabase.from("user_profile").insert({
-        id: data.user.id,
-        nickname,
-        phone,
-      });
-      if (profileError) {
-        setMessage("회원가입은 되었으나 프로필 저장 실패: " + profileError.message);
-        return;
-      }
-    }
     setMessage("회원가입 성공! 이메일을 확인해 주세요.");
     setTimeout(() => router.replace("/login"), 2000);
   };
