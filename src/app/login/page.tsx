@@ -20,7 +20,11 @@ export default function LoginPage() {
     setMessage('');
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      setMessage('로그인 실패: ' + error.message);
+      if (error.status === 429) {
+        setMessage('요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.');
+      } else {
+        setMessage('로그인 실패: ' + error.message);
+      }
     } else {
       setMessage('로그인 성공!');
       router.replace('/');
